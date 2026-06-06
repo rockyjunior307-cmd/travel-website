@@ -1,0 +1,7 @@
+User-agent: *
+
+Allow: /
+
+Disallow: /booking-success.html
+
+Sitemap: https://nuzatour.com/sitemap.xml
