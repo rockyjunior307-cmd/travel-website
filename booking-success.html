@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Booking Received | NUZA TOUR</title>
+
+<!-- Same font stack as main site -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   DESIGN TOKENS — mirrors main site exactly
+   ============================================ */
+:root {
+  --ocean:        #0077B6;
+  --ocean-hover:  #005f92;
+  --teal:         #00B4D8;
+  --teal-light:   rgba(0, 180, 216, 0.08);
+  --white:        #FFFFFF;
+  --bg-primary:   #FAFAF8;
+  --bg-secondary: #F4F3EF;
+  --bg-card:      #FFFFFF;
+  --text-primary: #111111;
+  --text-secondary:#4A4A4A;
+  --text-muted:   #888888;
+  --border:       #E5E4E0;
+  --border-light: #EEEDE9;
+  --gold:         #C9A84C;
+  --shadow:       0 2px 16px rgba(0,0,0,0.06);
+  --shadow-lg:    0 24px 72px rgba(0,0,0,0.10);
+  --shadow-card:  0 4px 32px rgba(0, 119, 182, 0.07), 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   DECORATIVE BACKGROUND
+   ============================================ */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+/* Large soft radial blobs — same atmosphere as the hero section */
+.page-bg::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -15%;
+  width: 680px;
+  height: 680px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,180,216,0.07) 0%, transparent 70%);
+}
+.page-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -15%;
+  left: -10%;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,119,182,0.06) 0%, transparent 70%);
+}
+/* Subtle dot-grid texture */
+.page-bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ============================================
+   MINIMAL HEADER — mirrors navbar branding
+   ============================================ */
+.site-header {
+  width: 100%;
+  padding: 22px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  animation: fadeDown 0.7s ease both;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+}
+.nav-logo-mark {
+  width: 34px; height: 34px; border-radius: 6px;
+  background: var(--ocean);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px; font-weight: 800;
+}
+.nav-logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 15px; letter-spacing: 1.5px;
+  color: var(--text-primary);
+}
+
+/* ============================================
+   MAIN LAYOUT
+   ============================================ */
+.page-main {
+  flex: 1;
+  width: 100%;
+  max-width: 780px;
+  padding: 20px 24px 60px;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ============================================
+   SUCCESS CARD
+   ============================================ */
+.success-card {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  box-shadow: var(--shadow-card);
+  padding: 56px 52px 52px;
+  text-align: center;
+  animation: slideUp 0.75s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Success badge ─── */
+.success-badge-wrap {
+  margin-bottom: 32px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.success-badge {
+  position: relative;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal-light) 0%, rgba(0,119,182,0.06) 100%);
+  border: 1.5px solid rgba(0,180,216,0.2);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 0;
+}
+/* Animated outer ring */
+.success-badge::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,180,216,0.15);
+  animation: rippleBadge 2.8s ease-out 0.8s infinite;
+}
+.success-badge::after {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,180,216,0.07);
+  animation: rippleBadge 2.8s ease-out 1.2s infinite;
+}
+.success-badge svg {
+  width: 34px; height: 34px;
+  stroke: var(--teal);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: checkDraw 0.6s 0.5s ease both;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+}
+
+/* ─── Tiny decorative label above heading ─── */
+.success-overline {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 12px;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.success-overline svg {
+  width: 12px; height: 12px;
+  stroke: var(--teal); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ─── Heading ─── */
+.success-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.35s ease both;
+}
+.success-heading em {
+  font-style: italic;
+  color: var(--teal);
+}
+
+/* ─── Divider ─── */
+.success-divider {
+  width: 48px; height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+  margin: 0 auto 22px;
+  animation: fadeIn 0.6s 0.4s ease both;
+}
+
+/* ─── Body text ─── */
+.success-text {
+  font-size: 0.925rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  font-weight: 300;
+  max-width: 520px;
+  margin: 0 auto 36px;
+  animation: fadeUp 0.6s 0.45s ease both;
+}
+.success-text strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ─── Estimated response chip ─── */
+.response-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 36px;
+  letter-spacing: 0.2px;
+  animation: fadeUp 0.6s 0.5s ease both;
+}
+.response-chip svg {
+  width: 14px; height: 14px;
+  stroke: var(--teal); fill: none;
+  stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* ─── Action buttons ─── */
+.btn-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.55s ease both;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.btn svg {
+  width: 15px; height: 15px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+/* Outlined — Back to Homepage */
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1.5px solid var(--border);
+}
+.btn-outline:hover {
+  border-color: var(--text-muted);
+  transform: translateY(-1px);
+}
+.btn-outline:hover svg { transform: translateX(-3px); }
+
+/* Primary — WhatsApp */
+.btn-wa {
+  background: #25D366;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(37,211,102,0.22);
+}
+.btn-wa:hover {
+  background: #1ebe5c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(37,211,102,0.3);
+}
+.btn-wa svg { stroke: #fff; }
+
+/* ============================================
+   BOOKING SUMMARY CARD
+   ============================================ */
+.summary-card {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: slideUp 0.75s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.summary-header {
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.summary-header-icon {
+  width: 34px; height: 34px; border-radius: 4px;
+  background: var(--teal-light);
+  border: 1px solid rgba(0,180,216,0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.summary-header-icon svg {
+  width: 15px; height: 15px;
+  stroke: var(--teal); fill: none;
+  stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+}
+.summary-header-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.summary-item {
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+}
+.summary-item:nth-child(even) { border-right: none; }
+.summary-item:nth-last-child(-n+2) { border-bottom: none; }
+/* If odd total, last item spans full width */
+.summary-item.span-full {
+  grid-column: 1 / -1;
+  border-right: none;
+  border-bottom: none;
+}
+.summary-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+.summary-value {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* ============================================
+   ASSISTANCE STRIP
+   ============================================ */
+.assist-strip {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow);
+  animation: slideUp 0.75s 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.assist-text-group { flex: 1; min-width: 220px; }
+.assist-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.assist-label svg {
+  width: 12px; height: 12px;
+  stroke: var(--teal); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.assist-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.assist-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-weight: 300;
+}
+.btn-wa-assist {
+  background: #25D366;
+  color: #fff;
+  padding: 13px 24px;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(37,211,102,0.2);
+  flex-shrink: 0;
+}
+.btn-wa-assist svg {
+  width: 15px; height: 15px;
+  stroke: #fff; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.btn-wa-assist:hover {
+  background: #1ebe5c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(37,211,102,0.3);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.site-footer {
+  width: 100%;
+  padding: 24px 40px;
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
+  position: relative;
+  z-index: 10;
+  animation: fadeIn 0.6s 0.7s ease both;
+  margin-top: auto;
+}
+.site-footer a {
+  color: var(--ocean);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.site-footer a:hover { color: var(--ocean-hover); }
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes rippleBadge {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.55); }
+}
+/* SVG checkmark draw-on animation */
+@keyframes checkDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 640px) {
+  .success-card { padding: 40px 28px 36px; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .summary-item {
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .summary-item:last-child { border-bottom: none; }
+  .summary-item.span-full { grid-column: 1; }
+  .assist-strip { flex-direction: column; align-items: flex-start; }
+  .btn-wa-assist { width: 100%; justify-content: center; }
+  .btn-group { flex-direction: column; }
+  .btn-group .btn { width: 100%; justify-content: center; }
+  .site-header { padding: 18px 24px; }
+  .page-main { padding: 16px 16px 48px; }
+}
+@media (max-width: 400px) {
+  .success-heading { font-size: 1.75rem; }
+  .success-card { padding: 32px 20px 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Decorative background -->
+<div class="page-bg" aria-hidden="true">
+  <div class="page-bg-dots"></div>
+</div>
+
+<!-- ── Minimal Header ── 
+<header class="site-header" role="banner">
+  <a href="index.html" class="nav-logo" aria-label="NUZA TOUR — Back to homepage">
+    <div class="nav-logo-mark" aria-hidden="true">N</div>
+    <span class="nav-logo-text">NUZA&nbsp;TOUR</span>
+  </a>
+</header>-->
+
+<!-- ── Page Body ── -->
+<main class="page-main" id="main-content">
+
+  <!-- ════ SUCCESS CARD ════ -->
+  <article class="success-card" role="status" aria-live="polite">
+
+    <!-- Animated badge -->
+    <div class="success-badge-wrap" aria-hidden="true">
+      <div class="success-badge">
+        <!-- Checkmark SVG — drawn on with CSS animation -->
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <polyline points="4 13 9 18 20 7"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Section label -->
+    <p class="success-overline">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      Booking Confirmed
+    </p>
+
+    <!-- Heading -->
+    <h1 class="success-heading">
+      Booking Request <em>Received</em>
+    </h1>
+
+    <div class="success-divider" aria-hidden="true"></div>
+
+    <!-- Message -->
+    <p class="success-text">
+      Thank you for booking with <strong>NUZA TOUR.</strong> 
+
+      We have received your booking request and will get back to you within 24 hours.
+
+      For immediate assistance and faster confirmation, please <strong>contact us via WhatsApp.</strong> 
+
+    </p>
+
+    <!-- Response time chip -->
+    <div class="response-chip" role="note">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+      Estimated response within 24 hours
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-group" role="group" aria-label="Next steps">
+      <a href="#" id="confirmWaBtn" class="btn btn-wa" target="_blank" rel="noopener"
+         aria-label="Confirm your booking via WhatsApp">
+        <!-- WhatsApp icon -->
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Confirm via WhatsApp
+      </a>      
+      <a href="index.html" class="btn btn-outline" aria-label="Return to NUZA TOUR homepage">
+        <!-- Arrow left icon -->
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Back to Homepage
+      </a>
+
+
+    </div>
+
+  </article>
+
+  <!-- ════ BOOKING SUMMARY — injected by JS if data available ════ -->
+  <section class="summary-card" id="summaryCard" aria-labelledby="summaryHeading" style="display:none;">
+    <div class="summary-header">
+      <div class="summary-header-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <span class="summary-header-text" id="summaryHeading">Booking Summary</span>
+    </div>
+    <div class="summary-grid" id="summaryGrid" role="list">
+      <!-- Rows injected by JS -->
+    </div>
+  </section>
+
+  <!-- ════ IMMEDIATE ASSISTANCE STRIP ════ -->
+  <aside class="assist-strip" aria-label="Need immediate assistance?">
+    <div class="assist-text-group">
+      <p class="assist-label">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        Need Immediate Assistance?
+      </p>
+      <p class="assist-title">We're here to help</p>
+      <p class="assist-desc">
+        For urgent requests or last-minute bookings, our team is available
+        directly via WhatsApp — daily from 07:00 to 20:00 WITA.
+      </p>
+    </div>
+    <a href="https://wa.me/6281238194479?text=Hello%20NUZA%20TOUR!%20I%20need%20immediate%20assistance%20with%20my%20booking."
+       class="btn-wa-assist"
+       target="_blank"
+       rel="noopener"
+       aria-label="Contact NUZA TOUR on WhatsApp for immediate assistance">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      WhatsApp Us
+    </a>
+  </aside>
+
+</main>
+
+<!-- ── Footer ── -->
+<footer class="site-footer" role="contentinfo">
+  <span>&copy; 2026 NUZA TOUR. All rights reserved.&ensp;&middot;&ensp;
+    <a href="index.html">Back to Website</a>
+  </span>
+</footer>
+
+<script>
+/* ============================================
+   BOOKING SUCCESS — JavaScript
+   Preserves all existing localStorage logic +
+   WhatsApp message generation.
+   ============================================ */
+
+(function () {
+
+  /* ── 1. Read booking data from localStorage ── */
+  var raw = localStorage.getItem('bookingData');
+  var booking = null;
+
+  try {
+    if (raw) booking = JSON.parse(raw);
+  } catch (e) {
+    booking = null;
+  }
+
+  /* ── 2. Build WhatsApp confirmation link ── */
+  var waBtn = document.getElementById('confirmWaBtn');
+
+  if (booking) {
+    var msg =
+      'Hello NUZA TOUR,\n\n' +
+      'I have submitted a booking request and would like to confirm.\n\n' +
+      'Name: ' + (booking.name || 'N/A') + '\n' +
+      'Hotel: ' + (booking.hotel || 'N/A') + '\n' +
+      'Package: ' + (booking.pkg || 'N/A') + '\n' +
+      'Travel Date: ' + (booking.date || 'N/A') + '\n' +
+      'Guests: ' + (booking.guests || 'N/A') + '\n\n' +
+      'Special Requests: ' + (booking.special || 'None') + '\n\n' +
+      'Please confirm availability. Thank you.';
+
+    waBtn.href = 'https://wa.me/6281238194479?text=' + encodeURIComponent(msg);
+  } else {
+    /* Fallback generic link when no booking data */
+    waBtn.href = 'https://wa.me/6281238194479?text=Hello%20NUZA%20TOUR!%20I%20would%20like%20to%20confirm%20my%20booking.';
+  }
+
+  /* ── 3. Render booking summary card ── */
+  if (booking) {
+    var card = document.getElementById('summaryCard');
+    var grid = document.getElementById('summaryGrid');
+
+    /* Format the travel date for display: 2026-06-10 → June 10, 2026 */
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      try {
+        var parts = dateStr.split('-');
+        var d = new Date(
+          parseInt(parts[0], 10),
+          parseInt(parts[1], 10) - 1,
+          parseInt(parts[2], 10)
+        );
+        return d.toLocaleDateString('en-US', {
+          year:  'numeric',
+          month: 'long',
+          day:   'numeric'
+        });
+      } catch (e) { return dateStr; }
+    }
+
+    /* Define which fields to show and their display labels */
+    var fields = [
+      { label: 'Full Name',      value: booking.name    },
+      { label: 'Hotel Name',     value: booking.hotel   },
+      { label: 'Tour Package',   value: booking.pkg     },
+      { label: 'Travel Date',    value: formatDate(booking.date) },
+      { label: 'Guests',         value: booking.guests  },
+      { label: 'Email',          value: booking.email   }
+    ].filter(function (f) { return f.value && f.value.trim() !== ''; });
+
+    /* Render each field as a summary row */
+    var html = '';
+    fields.forEach(function (f, i) {
+      /* Last item spans full width when total count is odd */
+      var isLast  = (i === fields.length - 1);
+      var isOdd   = (fields.length % 2 !== 0);
+      var span    = (isLast && isOdd) ? ' span-full' : '';
+      html +=
+        '<div class="summary-item' + span + '" role="listitem">' +
+          '<div class="summary-label">' + escHtml(f.label) + '</div>' +
+          '<div class="summary-value">' + escHtml(f.value) + '</div>' +
+        '</div>';
+    });
+
+    grid.innerHTML = html;
+    card.style.display = 'block';
+  }
+
+  /* ── Helper: escape HTML special chars ── */
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,  '&amp;')
+      .replace(/</g,  '&lt;')
+      .replace(/>/g,  '&gt;')
+      .replace(/"/g,  '&quot;');
+  }
+
+})();
+</script>
+
+</body>
+</html>
